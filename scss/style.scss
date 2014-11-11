@@ -1,0 +1,78 @@
+@import "compass/css3";
+
+$color: #399;
+$total: 40;
+
+html, body {
+  @include background-image(
+    radial-gradient(
+      circle at center center,
+      #000 0%,
+      #123 120%
+    )
+  );
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+ul {
+  @include transition(all 200ms cubic-bezier(1, 1.2, 0.8, 1.2));
+  width: 100%;
+  height: 100%;
+  
+  &:hover {
+    @include transform(rotate(45deg));
+    
+    li {
+      @include box-shadow(0 0 50px #6CC);
+      background: #6CC;
+    }
+  }
+  
+  li {
+    @include box-shadow(0 0 10px $color);
+    transform-origin: center top;
+    transform-style: preserve-3d;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 1px;
+    background: $color;
+  }
+  
+  @for $i from 1 through $total {
+    $currDeg: (360 / $total) * ($i - 1);
+    $currLen: random(250) + 50;
+    $delay: $i * random($total * 2);
+    $offset: random(40) * 2 + 5;
+    
+    li:nth-child(#{$i}) {
+      @include animation(forward#{$i} 800ms infinite #{$delay}ms linear);
+      @include transform(
+        rotate(#{$currDeg}deg)
+        translateY(#{$offset}px)
+        perspective(20px)
+      );
+      @include opacity(0);
+      height: #{$currLen}px;
+    }
+  }
+}
+
+@for $i from 1 through $total {
+  $currDeg: (360 / $total) * ($i - 1);
+  
+  @keyframes forward#{$i} {
+    100% {
+      @include transform(
+        rotate(#{$currDeg}deg)
+        translateY(500px)
+        perspective(120px)
+      );
+      @include opacity(1);
+      width: 7px;
+    }
+  }
+}
